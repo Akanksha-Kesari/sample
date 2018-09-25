@@ -35,7 +35,7 @@ public class UserDAO {
 	}
 
 	public void insertUser(User u) throws SQLException {
-		String query = "insert into user_reg values (?,?,?,?,?,?,?)";
+		String query = "insert into user_reg values (?,?,?,?,?,?,?,?)";
 		con = ConnectionProvider.getConnection();
 		ps = con.prepareStatement(query);
 		ps.setString(1, u.getfName());
@@ -45,6 +45,7 @@ public class UserDAO {
 		ps.setString(5, u.getAns());
 		ps.setString(6, u.getUserId());
 		ps.setString(7, u.getPassword());
+		ps.setInt(8, 0);
 		rs = ps.executeQuery();
 
 	}
@@ -123,7 +124,7 @@ public class UserDAO {
 	}
 
 	public String datel() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd" );
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String s = dateFormat.format(date);
 		return s;
@@ -131,7 +132,7 @@ public class UserDAO {
 
 	public void fundTransfer(String accountnum1, String accountnum2, String amount) throws SQLException {
 		java.sql.Date sqlDate = java.sql.Date.valueOf(datel());
-		
+
 		String query = "insert into transaction values(?,?,?,?)";
 		con = ConnectionProvider.getConnection();
 		ps = con.prepareStatement(query);
@@ -226,11 +227,7 @@ public class UserDAO {
 			ps = con.prepareStatement(query2);
 			ps.setString(1, userid);
 			rs = ps.executeQuery();
-			/*
-			 * rs.next();
-			 * System.out.println("account="+rs.getString(1)+"balance="+rs.
-			 * getString(2));
-			 */
+
 			return rs;
 		} else if (type.equalsIgnoreCase("current")) {
 
@@ -239,11 +236,7 @@ public class UserDAO {
 			ps = con.prepareStatement(query2);
 			ps.setString(1, userid);
 			rs = ps.executeQuery();
-			/*
-			 * rs.next();
-			 * System.out.println("account="+rs.getString(1)+"balance="+rs.
-			 * getString(2));
-			 */
+
 			return rs;
 		} else if (type.equalsIgnoreCase("saving")) {
 
@@ -252,11 +245,7 @@ public class UserDAO {
 			ps = con.prepareStatement(query2);
 			ps.setString(1, userid);
 			rs = ps.executeQuery();
-			/*
-			 * rs.next();
-			 * System.out.println("account="+rs.getString(1)+"balance="+rs.
-			 * getString(2));
-			 */
+
 			return rs;
 		}
 
@@ -271,11 +260,7 @@ public class UserDAO {
 			ps = con.prepareStatement(query2);
 			ps.setString(1, userid);
 			rs = ps.executeQuery();
-			/*
-			 * rs.next();
-			 * System.out.println("account="+rs.getString(1)+"balance="+rs.
-			 * getString(2));
-			 */
+
 			return rs;
 		} else if (type.equalsIgnoreCase("current")) {
 
@@ -284,11 +269,7 @@ public class UserDAO {
 			ps = con.prepareStatement(query2);
 			ps.setString(1, userid);
 			rs = ps.executeQuery();
-			/*
-			 * rs.next();
-			 * System.out.println("account="+rs.getString(1)+"balance="+rs.
-			 * getString(2));
-			 */
+
 			return rs;
 		} else if (type.equalsIgnoreCase("saving")) {
 
@@ -297,14 +278,169 @@ public class UserDAO {
 			ps = con.prepareStatement(query2);
 			ps.setString(1, userid);
 			rs = ps.executeQuery();
-			/*
-			 * rs.next();
-			 * System.out.println("account="+rs.getString(1)+"balance="+rs.
-			 * getString(2));
-			 */
+
 			return rs;
 		}
 		return rs;
-  
+
 	}
+
+	public ResultSet ministatement(String type, String userid) throws SQLException {
+
+		if (type.equalsIgnoreCase("salary")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate-1 from dual) AND ROWNUM<=7  and account_num_sender in   (select saccount_num from SALARY_ACCOUNT  where saccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+
+		} else if (type.equalsIgnoreCase("current")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select caccount_num from CURRENT_ACCOUNT  where caccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+		} else if (type.equalsIgnoreCase("saving")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select svaccount_num from SAVING_ACCOUNT  where svaccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+		}
+		return rs;
+
+	}
+
+	public ResultSet threemonth(String type, String userid) throws SQLException {
+
+		if (type.equalsIgnoreCase("salary")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select saccount_num from SALARY_ACCOUNT  where saccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+
+		} else if (type.equalsIgnoreCase("current")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select caccount_num from CURRENT_ACCOUNT  where caccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+		} else if (type.equalsIgnoreCase("saving")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select svaccount_num from SAVING_ACCOUNT  where svaccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+		}
+		return rs;
+
+	}
+
+	public ResultSet onemonth(String type, String userid) throws SQLException {
+		System.out.println("one month");
+
+		if (type.equalsIgnoreCase("salary")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select saccount_num from SALARY_ACCOUNT  where saccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+
+		} else if (type.equalsIgnoreCase("current")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select caccount_num from CURRENT_ACCOUNT  where caccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+		} else if (type.equalsIgnoreCase("saving")) {
+
+			String query2 = "select * from TRANSACTION where date1 <(select sysdate from dual) AND ROWNUM<=7  and account_num_sender in   (select svaccount_num from SAVING_ACCOUNT  where svaccount_num in (select account_num from user_account_num where id=?)) order by date1 desc";
+
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+
+			return rs;
+		}
+		return rs;
+
+	}
+	
+	public ResultSet selectCountLogin(String userid) throws SQLException
+	{
+		String query="select count_login from user_reg where id1=?";
+		con = ConnectionProvider.getConnection();
+		ps = con.prepareStatement(query);
+		
+		ps.setString(1, userid);
+		rs = ps.executeQuery();
+		return rs;
+        
+	}
+	public ResultSet increment(String userid) throws SQLException
+	{
+		String query="update user_reg set count_login=count_login+1 where id1=?";
+		con = ConnectionProvider.getConnection();
+		ps = con.prepareStatement(query);
+		
+		ps.setString(1, userid);
+		rs = ps.executeQuery();
+		return rs;
+        
+	}
+	public ResultSet setCountLoginZero(String userid) throws SQLException
+	{
+		String query="update user_reg set count_login='0' where id1=?";
+		con = ConnectionProvider.getConnection();
+		ps = con.prepareStatement(query);
+		
+		ps.setString(1, userid);
+		rs = ps.executeQuery();
+		return rs;
+        
+	}
+
 }

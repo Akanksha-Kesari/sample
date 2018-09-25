@@ -9,13 +9,18 @@
 	<meta name="keywords" content="Classic Register Form Responsive Widget,Login form widgets, Sign up Web forms , Login signup Responsive web form,Flat Pricing table,Flat Drop downs,Registration Forms,News letter Forms,Elements"
 	/>
 	<script>
-		addEventListener("load", function () {
+		/* addEventListener("load", function () {
 			setTimeout(hideURLbar, 0);
 		}, false);
 
 		function hideURLbar() {
 			window.scrollTo(0, 1);
-		}
+		} */
+		/* var inc=0;
+		 function myFunction() {
+		    inc=inc+1;
+		    alert(inc);    
+		 } */
 	</script>
 	<!-- Meta tag Keywords -->
 	<!-- css files -->
@@ -52,8 +57,19 @@
 						
 					</div>
 				</div>
+				
 						<div class="clear"></div>
-				<input type="submit" value="Login">
+						<%
+						String msg=(String)request.getAttribute("msg");
+						if(msg==null){ %>
+				<input type="submit" onclick="myFunction()" value="Login">
+				<%} 
+				else
+				{%>
+				<script>
+					alert("account locked");
+					</script>
+			<%	}%>
 				<div class="form-style-agile">
 					
 					<br>New User?	
@@ -70,6 +86,7 @@
 			</form>
 		</div>
 	</div>
-
+	
+		
 </body>
 </html>

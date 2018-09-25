@@ -50,10 +50,9 @@ body {
 </style>
 </head>
 
-<%Object val=request.getParameter("val");
-System.out.print(val);
-Object userid=request.getParameter("userid");
-System.out.print(userid);
+<%
+
+
 %>
 <body background="images/1.jpg">
 <div class="topnav">
@@ -68,12 +67,20 @@ System.out.print(userid);
 
 
 
-<!-- <img src="images/1.jpg" alt="Banking image" style="width:50%"> -->
-<% 
 
+<%session=request.getSession(false);
+
+Object userid=null;
+if(session!=null)
+{  List<String> i=(List<String>)session.getAttribute("accountlist");
+     String  val=(String)request.getParameter("val");
+     System.out.print(val);
+    /*  System.out.print("account:"+i.get(Integer.parseInt(val.toString()))); */
+	userid=session.getAttribute("userid");
+	
 try{
 	UserDAO obj=new UserDAO();
-ResultSet rs1 = obj.showAccountDetail(val.toString(), userid.toString());
+ResultSet rs1 = obj.showAccountDetail(i.get(Integer.parseInt(val.toString())), userid.toString());
 while(rs1.next()){
 %>
 <div style="background-color:lightblue">
@@ -84,64 +91,121 @@ balance&nbsp; &nbsp;<%=rs1.getString(2) %>
 
 </center></div>
 <div class="">
-						<select name="select"  onchange="report(this.value)">
+						<select id="select" name="select"  onchange="report(this)">
 						<option value="select your choice">select your choice</option>
 							<option value="ministatement">Mini Statement</option>
-							<option value="onemonth ">one month </option>
+							<option value="onemonth">one month </option>
 							<option value="threemonth">three month</option>
 						</select> <br>
 					</div>
 <%
 
 }
-ResultSet rs=obj.showTransaction(val.toString(), userid.toString());
 
-while(rs.next()){
-	
-	%>
-	<div style="background-color:lightpink">
-	<b>Transaction Details</b>
-<table style="width:100%">
-<tr>
-     <th>Date</th>
-     <th>Reference Number</th>
-    <th>Amount</th> 
-    </tr>
- <tr><td><%=rs.getString(3)%></td><td><%=rs.getString(2)%></td><td>
- <%=rs.getString(4) %></td></tr>
-       
 
-<% 
-
-}
-%>
-</table></div>
-
-<% }
+ }
 catch(Exception ex)
 {
     out.println(ex);
- }
+ }}
+else
+{
+	response.sendRedirect("index.jsp");
+	}
 
 %>
+<div id="mini_statement" style="display:none;">
+
+<table style="width:100%">
+  <tr>
+    <th>Date</th>
+    <th>Reference number</th> 
+    <th>Amount</th>
+  </tr>
+ <%UserDAO obj1=new UserDAO();
+ System.out.print(userid);
+ List<String> i=(List<String>)session.getAttribute("accountlist");
+ String  val=(String)request.getParameter("val");
+  ResultSet rs1=obj1.ministatement(i.get(Integer.parseInt(val.toString())),userid.toString());
+  while(rs1.next())
+  {%>
+  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(2)%></td><td>
+ <%=rs1.getString(4) %></td></tr>
+       
+  <%} %>
+</table>
+
+</div>
+
+<div id="one_month" style="display:none;">
+
+<table style="width:100%">
+  <tr>
+    <th>Date</th>
+    <th>Reference number</th> 
+    <th>Amount</th>
+  </tr>
+ <%
+ System.out.print(userid);
+ 
+ 
+ rs1=obj1.onemonth(i.get(Integer.parseInt(val.toString())),userid.toString());
+  while(rs1.next())
+  {%>
+  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(2)%></td><td>
+ <%=rs1.getString(4) %></td></tr>
+       
+  <%} %>
+</table>
+
+</div>
+<div id="three_month" style="display:none;">
+
+<table style="width:100%">
+  <tr>
+    <th>Date</th>
+    <th>Reference number</th> 
+    <th>Amount</th>
+  </tr>
+ <%
+ System.out.print(userid);
+  rs1=obj1.threemonth(i.get(Integer.parseInt(val.toString())),userid.toString());
+  while(rs1.next())
+  {%>
+  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(2)%></td><td>
+ <%=rs1.getString(4) %></td></tr>
+       
+  <%} %>
+</table>
+
+</div>
 
 <script type="text/javascript">
-function report(func)
+function report(select)
 {
-    func();
+    if(select.value=="ministatement")
+    	{document.getElementById('three_month').style.display="none";
+    	  document.getElementById('mini_statement').style.display="block";
+    	  document.getElementById('one_month').style.display="none";
+
+    	}
+    else if(select.value=="onemonth")
+	{document.getElementById('three_month').style.display="none";
+	  document.getElementById('mini_statement').style.display="none";
+	  document.getElementById('one_month').style.display="block";
+
+	}
+    else  if(select.value=="threemonth")
+	{
+    	document.getElementById('three_month').style.display="block";
+  	  document.getElementById('mini_statement').style.display="none";
+  	  document.getElementById('one_month').style.display="none";
+
+
+	}
 }
 
-function ministatement()
-{
-    alert('ministatement');
-    
-    
-}
 
-function monthly()
-{
-    alert('monthly');
-}
 </script>
  
 

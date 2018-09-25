@@ -13,7 +13,7 @@ public class ConnectionProvider {
 			/* Establish a connection with a data source */
 			con = DriverManager.getConnection(
 					"jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
-			System.out.println("connected");
+			//System.out.println("connected");
 		} catch (ClassNotFoundException | SQLException e) {
 
 		}

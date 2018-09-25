@@ -20,19 +20,34 @@
 		<link rel="stylesheet" type="text/css" href="css/component1.css" />
 		<script src="js/modernizr1.custom.js"></script>
 </head>
-<%Object userid=request.getAttribute("userid");
-        System.out.print(userid.toString());
-        List<String>accountlist=new ArrayList<String>();
-        UserDAO obj=new UserDAO();
-        ResultSet rs=obj.accountype(userid.toString());
-      
-      
-       while(rs.next())
-       {
-    	   accountlist.add(rs.getString(1));
-    	   
-       }
-     
+
+
+<% 
+session= request.getSession(false);
+List<String>accountlist=new ArrayList<String>();
+ Object userid=null;
+				if(session!=null)
+				{
+					userid=session.getAttribute("userid");
+					System.out.print(userid.toString());
+			        
+			        UserDAO obj=new UserDAO();
+			        ResultSet rs=obj.accountype(userid.toString());
+			      
+			      
+			       while(rs.next())
+			       {
+			    	   accountlist.add(rs.getString(1));
+			    	   
+			       }
+			     session.setAttribute("accountlist", accountlist);
+				}
+				else
+				{
+					response.sendRedirect("index.jsp");
+				}
+
+        
        %>
 <body background="images/1.jpg">
 
@@ -45,10 +60,12 @@
 					<nav class="dr-menu">
 						<div class="dr-trigger"><span class="dr-icon dr-icon-menu"></span><a class="dr-label">Account</a></div>
 						<ul>
-							<% for(int i=0;i<accountlist.size();i++)
+							<%userid=session.getAttribute("userid");
+							for(int i=0;i<accountlist.size();i++)
 					       {%>
-					       <li><a class="dr-icon " href="Account.jsp?val=<%=accountlist.get(i) %>&userid=<%=userid%>"><%=accountlist.get(i) %></a></li>
+					       <li><a class="dr-icon " href="Account.jsp?val=<%=i %>"><%=accountlist.get(i) %></a></li>
 					       <%} %>
+					       <li><a href="index.jsp">Logout</a>
 							</ul>
 					</nav>
 				</div>
