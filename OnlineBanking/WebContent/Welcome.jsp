@@ -282,8 +282,8 @@ banking experience.<p>
 					<div class="services-two-grids">
 						<div class="agileinfo-services-right">
 							<img src="images/10.jpg" alt="" />
-							<h6>Maecenas sollicitudin eros lectus, a rutrum nisi vulputate quis. Proin tempus, lectus vitae gravida suscipit</h6>
-						</div>
+							<h6>The Internet has drastically changed the landscape of the finance industry over the past few years.</h6>
+							</div>
 						<!-- date -->
 						<div id="design" class="date">
 										<div id="cycler">   

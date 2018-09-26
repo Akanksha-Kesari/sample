@@ -68,6 +68,7 @@ List<String>accountlist=new ArrayList<String>();
 					       <li><a href="index.jsp">Logout</a>
 							</ul>
 					</nav>
+					
 				</div>
 			</div>
 		</div><!-- /container -->

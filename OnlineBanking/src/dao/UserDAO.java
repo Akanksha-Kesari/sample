@@ -133,7 +133,7 @@ public class UserDAO {
 	public void fundTransfer(String accountnum1, String accountnum2, String amount) throws SQLException {
 		java.sql.Date sqlDate = java.sql.Date.valueOf(datel());
 
-		String query = "insert into transaction values(?,?,?,?)";
+		String query = "insert into transaction values(?,?,?,?,ref_seq.Nextval)";
 		con = ConnectionProvider.getConnection();
 		ps = con.prepareStatement(query);
 		ps.setString(1, accountnum1);

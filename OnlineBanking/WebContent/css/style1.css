@@ -323,7 +323,7 @@ span.fa {
     font-size: 15px;
     border-radius: 50%;
 }
-
+.pom-agile select,
 .pom-agile input[type="text"],
 .pom-agile input[type="email"],
 .pom-agile input[type="password"] {
@@ -336,6 +336,7 @@ span.fa {
     letter-spacing: 1px;
     flex-basis: 92%;
     -webkit-flex-basis: 92%;
+    width:100%
 }
 
 .sub-main-w3 input[type="submit"] {

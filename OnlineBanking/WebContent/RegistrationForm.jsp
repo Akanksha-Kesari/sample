@@ -73,10 +73,10 @@
 					</div>
 				</div>
 
-				<div class="">
+				<div class="form-style-agile">
 					<label>Select Question</label>
 					<div class="pom-agile">
-						<select name="que">
+						<select name="que" class="pom-agile">
 							<option value="What is your pet name?">What is your pet name?</option>
 							<option value="What are the last 3 digits of your mobile number?">What are the last 3 digits of your
 								mobile number?</option>

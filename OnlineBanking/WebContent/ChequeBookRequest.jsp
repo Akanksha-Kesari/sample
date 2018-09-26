@@ -7,12 +7,9 @@
 <title>Insert title here</title>
 </head>
 <script type="text/javascript">
-
 </script>
 <body>
 
-<%Object amount=request.getAttribute("amount"); %>
-<h1><%=amount %> is successfully transfered.</h1>
-<a href="Account.jsp">Check balance</a>
+</form>
 </body>
 </html>

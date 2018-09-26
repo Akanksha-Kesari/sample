@@ -49,7 +49,29 @@ body {
 
 </style>
 </head>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js">            
+</script>
+<script type="text/javascript">
 
+$(function(){
+	
+    $('#one').click(function(){
+        var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#one_month').html()) 
+        location.href=url
+        return false
+    })
+    $('#mini').click(function(){
+        var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#mini_statement').html()) 
+        location.href=url
+        return false
+    })
+    $('#third').click(function(){
+        var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#three_month').html()) 
+        location.href=url
+        return false
+    })
+})
+</script>
 <%
 
 
@@ -60,7 +82,7 @@ body {
   <a class="" href=""></a>
   <a href="Welcome.jsp">Home</a>
   <a href="FundTransferLogin.jsp">Fund Transfer</a>
-  <a href="#contact">Contact</a>
+  <a href="#ChequeBook">Cheque Book Request</a>
   <a href="#about">About</a>
 </div>
 
@@ -73,7 +95,8 @@ body {
 Object userid=null;
 if(session!=null)
 {  List<String> i=(List<String>)session.getAttribute("accountlist");
-     String  val=(String)request.getParameter("val");
+    String val=(String)request.getParameter("val");
+    //String  val= (String)session.getAttribute("val0");
      System.out.print(val);
     /*  System.out.print("account:"+i.get(Integer.parseInt(val.toString()))); */
 	userid=session.getAttribute("userid");
@@ -96,6 +119,7 @@ balance&nbsp; &nbsp;<%=rs1.getString(2) %>
 							<option value="ministatement">Mini Statement</option>
 							<option value="onemonth">one month </option>
 							<option value="threemonth">three month</option>
+							<option value="specified">Specified Time Period</option>
 						</select> <br>
 					</div>
 <%
@@ -115,11 +139,13 @@ else
 
 %>
 <div id="mini_statement" style="display:none;">
+<button id='mini' >click me to get transaction in xml</button>
 
 <table style="width:100%">
   <tr>
     <th>Date</th>
     <th>Reference number</th> 
+    <th>Account Number</th>
     <th>Amount</th>
   </tr>
  <%UserDAO obj1=new UserDAO();
@@ -129,8 +155,10 @@ else
   ResultSet rs1=obj1.ministatement(i.get(Integer.parseInt(val.toString())),userid.toString());
   while(rs1.next())
   {%>
-  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(2)%></td><td>
- <%=rs1.getString(4) %></td></tr>
+  <tr><td><%=rs1.getString(3)%></td>
+  <td><%=rs1.getString(5)%></td>
+  <td><%=rs1.getString(2)%></td>
+  <td><%=rs1.getString(4) %></td></tr>
        
   <%} %>
 </table>
@@ -138,11 +166,12 @@ else
 </div>
 
 <div id="one_month" style="display:none;">
-
+<button id='one'>click me to get transaction in xml</button>
 <table style="width:100%">
   <tr>
     <th>Date</th>
-    <th>Reference number</th> 
+    <th>Reference number</th>
+     <th>Account Number</th> 
     <th>Amount</th>
   </tr>
  <%
@@ -152,7 +181,8 @@ else
  rs1=obj1.onemonth(i.get(Integer.parseInt(val.toString())),userid.toString());
   while(rs1.next())
   {%>
-  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(2)%></td><td>
+  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(5)%></td>
+   <td><%=rs1.getString(2)%></td><td>
  <%=rs1.getString(4) %></td></tr>
        
   <%} %>
@@ -160,11 +190,13 @@ else
 
 </div>
 <div id="three_month" style="display:none;">
+<button id='three' >click me to get transaction in xml</button>
 
 <table style="width:100%">
   <tr>
     <th>Date</th>
-    <th>Reference number</th> 
+    <th>Reference number</th>
+     <th>Account Number</th> 
     <th>Amount</th>
   </tr>
  <%
@@ -172,17 +204,27 @@ else
   rs1=obj1.threemonth(i.get(Integer.parseInt(val.toString())),userid.toString());
   while(rs1.next())
   {%>
-  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(2)%></td><td>
+  <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(5)%></td>
+   <td><%=rs1.getString(2)%></td><td>
  <%=rs1.getString(4) %></td></tr>
        
   <%} %>
 </table>
 
 </div>
+<form action="Account.jsp"></form>
+<div id="specified"   style="display:none;">
+<input type="date" id="fromdate" name="From" >
+<input type="date" id="todate" name="to"  >
+<input type="button"  id="datebutton" onclick="report(this)" name="submit" value="submit">
+<%String from=request.getParameter("From");
+System.out.print(from);%>
+</div>
+
 
 <script type="text/javascript">
 function report(select)
-{
+{   alert(select.value);
     if(select.value=="ministatement")
     	{document.getElementById('three_month').style.display="none";
     	  document.getElementById('mini_statement').style.display="block";
@@ -193,6 +235,7 @@ function report(select)
 	{document.getElementById('three_month').style.display="none";
 	  document.getElementById('mini_statement').style.display="none";
 	  document.getElementById('one_month').style.display="block";
+	  document.getElementById('specified').style.display="none";
 
 	}
     else  if(select.value=="threemonth")
@@ -200,11 +243,32 @@ function report(select)
     	document.getElementById('three_month').style.display="block";
   	  document.getElementById('mini_statement').style.display="none";
   	  document.getElementById('one_month').style.display="none";
+  	 document.getElementById('specified').style.display="none";
 
 
 	}
-}
+    else  if(select.value=="specified")
+	{
+    	document.getElementById('three_month').style.display="none";
+  	  document.getElementById('mini_statement').style.display="none";
+  	  document.getElementById('one_month').style.display="none";
+  	 document.getElementById('specified').style.display="block";
 
+	}
+    else  if(select.value=="submit")
+	{
+    	document.getElementById('three_month').style.display="none";
+  	  document.getElementById('mini_statement').style.display="none";
+  	  document.getElementById('one_month').style.display="none";
+  	 document.getElementById('specified').style.display="none";
+  	 var from=document.getElementById('fromdate').value;
+  	var to=document.getElementById('todate').value;
+  	alert(from+to);
+
+	}
+}
+   
+   
 
 </script>
  
