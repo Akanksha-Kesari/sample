@@ -30,7 +30,7 @@ public class FundTransferServ extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String accountnum1 =(String)request.getParameter("value");
-		System.out.println(accountnum1);
+		
 		String accountnum2 =(String)request.getParameter("accountnum2");
 		String amount=(String)request.getParameter("amount");
 		UserDAO obj=new UserDAO();

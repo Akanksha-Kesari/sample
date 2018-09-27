@@ -35,12 +35,13 @@ public class LoginServ extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userid=(String)request.getParameter("userid");
+		System.out.println(userid);
 		String password=(String)request.getParameter("Password");
 		UserDAO obj=new UserDAO();
 		try {
 			ResultSet rs=obj.selectCountLogin(userid);
 			rs.next();
-			System.out.println(rs.getString(1));
+			
 			if(rs.getInt(1)<3)
 			{
 				

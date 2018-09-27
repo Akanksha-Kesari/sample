@@ -8,8 +8,18 @@
 </head>
 <script type="text/javascript">
 </script>
-<body>
-
+<%if(session!=null)
+	{
+	System.out.print("cheque:"+session.getAttribute("userid"));
+	System.out.print("cheque:"+session.getAttribute("accountype"));
+	}%>
+<body background="images/1.jpg">
+ 
+<form action="ChequeBookServ" method="Post">
+   For Cheque Book Request Click Yes
+    <br><br>
+    <input type="submit" name="action" value="yes">
+    <input type="submit" name="action" value="no">
 </form>
 </body>
 </html>

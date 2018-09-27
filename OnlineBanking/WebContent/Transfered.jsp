@@ -13,6 +13,6 @@
 
 <%Object amount=request.getAttribute("amount"); %>
 <h1><%=amount %> is successfully transfered.</h1>
-<a href="Account.jsp">Check balance</a>
+<a href="AccountType.jsp">Check balance</a>
 </body>
 </html>

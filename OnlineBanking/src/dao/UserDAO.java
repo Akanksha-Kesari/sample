@@ -442,5 +442,159 @@ public class UserDAO {
 		return rs;
         
 	}
+	
+	
+	public void chequeBookRequest(String type, String userid) throws SQLException {
+		String accountnum="";
+		java.sql.Date sqlDate = java.sql.Date.valueOf(datel());
+		if (type.equalsIgnoreCase("salary")) {
 
+			String query2 = "select saccount_num,sbalance from SALARY_ACCOUNT  where saccount_num in (select account_num from user_account_num where id=?)";
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+            while(rs.next())
+            {
+            	accountnum=(String)rs.getString(1);
+            	
+            }
+            String query="insert into cheque_Book_Request values(?,cheque_ref.nextval,?,?)";
+            ps=con.prepareStatement(query);
+            ps.setString(1, accountnum);
+            ps.setDate(2, sqlDate);
+            ps.setString(3,"1");
+            rs=ps.executeQuery();
+            System.out.println("inserted");
+            	
+			
+		} else if (type.equalsIgnoreCase("current")) {
+
+			String query2 = "select caccount_num,cbalance from CURRENT_ACCOUNT  where caccount_num in (select account_num from user_account_num where id=?)";
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+			while(rs.next())
+            {
+            	accountnum=(String)rs.getString(1);
+            	
+            }
+            String query="insert into cheque_Book_Request values(?,cheque_ref.nextval,?,?)";
+            ps=con.prepareStatement(query);
+            ps.setString(1, accountnum);
+            ps.setDate(2, sqlDate);
+            ps.setString(3,"1");
+              rs=ps.executeQuery();
+            	
+			
+			
+		} else if (type.equalsIgnoreCase("saving")) {
+
+			String query2 = "select svaccount_num,svbalance from SAVING_ACCOUNT  where svaccount_num in (select account_num from user_account_num where id=?)";
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+			while(rs.next())
+            {
+            	accountnum=(String)rs.getString(1);
+            	
+            }
+            String query="insert into cheque_Book_Request values(?,cheque_ref.nextval,?,?)";
+            ps=con.prepareStatement(query);
+            ps.setString(1, accountnum);
+            ps.setDate(2, sqlDate);
+            ps.setString(3,"1");
+             rs=ps.executeQuery();
+            	
+			
+
+		
+	}
+	}
+	public void selectchequeBookRequest(String type, String userid) throws SQLException {
+		String accountnum="";
+		System.out.println("select");
+		con = ConnectionProvider.getConnection();
+		java.sql.Date sqlDate = java.sql.Date.valueOf(datel());
+		if (type.equalsIgnoreCase("salary")) {
+
+			String query2 = "select CHE_ACCOUNT_NUM  from Cheque_Book_Request where CHE_ACCOUNT_NUM in(select saccount_num from SALARY_ACCOUNT  where saccount_num in (select account_num from user_account_num where id=?))";
+			
+			ps = con.prepareStatement(query2);
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+            if(rs.next())
+            {
+            	accountnum=(String)rs.getString(1);
+            	 String query="update cheque_Book_Request set status=?-(select req_date from cheque_Book_Request where che_account_num=?) where che_account_num=?";                                                                                                                                           
+            	ps=con.prepareStatement(query);
+            	ps.setDate(1, sqlDate);
+            	ps.setString(2, accountnum);
+            	ps.setString(3, accountnum);
+            	ps.executeQuery();
+            	
+            }
+            else
+            {
+            	chequeBookRequest(type,userid);
+            	System.out.println("else");
+            }
+            
+            	
+			
+		} else if (type.equalsIgnoreCase("current")) {
+
+			String query2 = "select CHE_ACCOUNT_NUM  from Cheque_Book_Request where CHE_ACCOUNT_NUM in(select caccount_num from CURRENT_ACCOUNT  where caccount_num in (select account_num from user_account_num where id=?))";
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+			if(rs.next())
+            {
+            	accountnum=(String)rs.getString(1);
+            	 String query="update cheque_Book_Request set status=?-(select req_date from cheque_Book_Request where che_account_num=?) where che_account_num=?";                                                                                                                                           
+            	ps=con.prepareStatement(query);
+            	ps.setDate(1, sqlDate);
+            	ps.setString(2, accountnum);
+            	ps.setString(3, accountnum);
+            	ps.executeQuery();
+            }
+			else
+            {
+            	chequeBookRequest(type,userid);
+            }
+            
+			
+			
+		} else if (type.equalsIgnoreCase("saving")) {
+
+			String query2 = "select CHE_ACCOUNT_NUM  from Cheque_Book_Request where CHE_ACCOUNT_NUM in(select svaccount_num from SAVING_ACCOUNT  where svaccount_num in (select account_num from user_account_num where id=?))";
+			con = ConnectionProvider.getConnection();
+			ps = con.prepareStatement(query2);
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+			if(rs.next())
+            {
+            	accountnum=(String)rs.getString(1);
+            	 String query="update cheque_Book_Request set status=?-(select req_date from cheque_Book_Request where che_account_num=?) where che_account_num=?";                                                                                                                                           
+            	ps=con.prepareStatement(query);
+            	ps.setDate(1, sqlDate);
+            	ps.setString(2, accountnum);
+            	ps.setString(3, accountnum);
+            	ps.executeQuery();
+            }
+			else
+            {
+            	chequeBookRequest(type,userid);
+            }
+            
+            
+			
+
+		
+	}
+	}
+    
 }

@@ -54,7 +54,7 @@ public class RegistrationSer extends HttpServlet {
          try {
 			if(obj.validateAccountNumber(u))
 			  {
-				System.out.println("validate");
+				
 				obj.insertUser(u);
 				response.sendRedirect("index.jsp");
 				

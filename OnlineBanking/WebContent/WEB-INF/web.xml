@@ -89,4 +89,14 @@
     <servlet-name>FundTransferServ</servlet-name>
     <url-pattern>/FundTransferServ</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ChequeBookServ</display-name>
+    <servlet-name>ChequeBookServ</servlet-name>
+    <servlet-class>Servlets.ChequeBookServ</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChequeBookServ</servlet-name>
+    <url-pattern>/ChequeBookServ</url-pattern>
+  </servlet-mapping>
 </web-app>

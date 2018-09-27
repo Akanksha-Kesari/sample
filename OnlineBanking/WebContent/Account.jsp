@@ -7,6 +7,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -79,10 +80,10 @@ $(function(){
 <body background="images/1.jpg">
 <div class="topnav">
 
-  <a class="" href=""></a>
+  
   <a href="Welcome.jsp">Home</a>
   <a href="FundTransferLogin.jsp">Fund Transfer</a>
-  <a href="#ChequeBook">Cheque Book Request</a>
+  <a href="#ChequeBookRequest" onclick="report(this)">Cheque Book Request</a>
   <a href="#about">About</a>
 </div>
 
@@ -92,18 +93,20 @@ $(function(){
 
 <%session=request.getSession(false);
 
-Object userid=null;
+String userid=null;
 if(session!=null)
 {  List<String> i=(List<String>)session.getAttribute("accountlist");
     String val=(String)request.getParameter("val");
-    //String  val= (String)session.getAttribute("val0");
-     System.out.print(val);
-    /*  System.out.print("account:"+i.get(Integer.parseInt(val.toString()))); */
-	userid=session.getAttribute("userid");
-	
+    
+      
+      session.setAttribute("accountype", i.get(Integer.parseInt(val)));
+     userid=(String)session.getAttribute("userid");
+     System.out.print(userid);
+     System.out.print(i.get(Integer.parseInt(val)));
+     
 try{
 	UserDAO obj=new UserDAO();
-ResultSet rs1 = obj.showAccountDetail(i.get(Integer.parseInt(val.toString())), userid.toString());
+ResultSet rs1 = obj.showAccountDetail(i.get(Integer.parseInt(val)), userid);
 while(rs1.next()){
 %>
 <div style="background-color:lightblue">
@@ -149,10 +152,10 @@ else
     <th>Amount</th>
   </tr>
  <%UserDAO obj1=new UserDAO();
- System.out.print(userid);
+ 
  List<String> i=(List<String>)session.getAttribute("accountlist");
  String  val=(String)request.getParameter("val");
-  ResultSet rs1=obj1.ministatement(i.get(Integer.parseInt(val.toString())),userid.toString());
+  ResultSet rs1=obj1.ministatement(i.get(Integer.parseInt(val)),userid);
   while(rs1.next())
   {%>
   <tr><td><%=rs1.getString(3)%></td>
@@ -175,10 +178,10 @@ else
     <th>Amount</th>
   </tr>
  <%
- System.out.print(userid);
  
  
- rs1=obj1.onemonth(i.get(Integer.parseInt(val.toString())),userid.toString());
+ 
+ rs1=obj1.onemonth(i.get(Integer.parseInt(val)),userid);
   while(rs1.next())
   {%>
   <tr><td><%=rs1.getString(3)%></td><td><%=rs1.getString(5)%></td>
@@ -200,7 +203,7 @@ else
     <th>Amount</th>
   </tr>
  <%
- System.out.print(userid);
+ 
   rs1=obj1.threemonth(i.get(Integer.parseInt(val.toString())),userid.toString());
   while(rs1.next())
   {%>
@@ -212,31 +215,33 @@ else
 </table>
 
 </div>
+
 <form action="Account.jsp"></form>
 <div id="specified"   style="display:none;">
 <input type="date" id="fromdate" name="From" >
 <input type="date" id="todate" name="to"  >
 <input type="button"  id="datebutton" onclick="report(this)" name="submit" value="submit">
 <%String from=request.getParameter("From");
-System.out.print(from);%>
+%>
 </div>
 
 
 <script type="text/javascript">
 function report(select)
-{   alert(select.value);
+{   
     if(select.value=="ministatement")
     	{document.getElementById('three_month').style.display="none";
     	  document.getElementById('mini_statement').style.display="block";
     	  document.getElementById('one_month').style.display="none";
-
+    	  document.getElementById('specified').style.display="none";
+    	 
     	}
     else if(select.value=="onemonth")
 	{document.getElementById('three_month').style.display="none";
 	  document.getElementById('mini_statement').style.display="none";
 	  document.getElementById('one_month').style.display="block";
 	  document.getElementById('specified').style.display="none";
-
+	  
 	}
     else  if(select.value=="threemonth")
 	{
@@ -244,8 +249,7 @@ function report(select)
   	  document.getElementById('mini_statement').style.display="none";
   	  document.getElementById('one_month').style.display="none";
   	 document.getElementById('specified').style.display="none";
-
-
+  
 	}
     else  if(select.value=="specified")
 	{
@@ -253,7 +257,7 @@ function report(select)
   	  document.getElementById('mini_statement').style.display="none";
   	  document.getElementById('one_month').style.display="none";
   	 document.getElementById('specified').style.display="block";
-
+  	
 	}
     else  if(select.value=="submit")
 	{
@@ -263,15 +267,39 @@ function report(select)
   	 document.getElementById('specified').style.display="none";
   	 var from=document.getElementById('fromdate').value;
   	var to=document.getElementById('todate').value;
-  	alert(from+to);
+  	
 
 	}
+    else  if(select.text=="Cheque Book Request")
+	{    
+    	document.getElementById('three_month').style.display="none";
+  	  document.getElementById('mini_statement').style.display="none";
+  	  document.getElementById('one_month').style.display="none";
+  	 document.getElementById('specified').style.display="none";
+  	  var x=confirm("confirm to request for cheque book!");
+            if(x=="true")
+       {<%
+    	   try {
+    		   UserDAO obj=new UserDAO();
+    		   String userid1=(String)session.getAttribute("userid");
+    			String type=(String)session.getAttribute("accountype");
+    			
+   			obj.selectchequeBookRequest(type, userid1);
+   		} catch (SQLException e) {
+   			// TODO Auto-generated catch block
+   			e.printStackTrace();
+   		}
+       
+      %> 
+       }
+      
+	}
+    
 }
    
    
 
 </script>
  
-
 </body>
 </html>
