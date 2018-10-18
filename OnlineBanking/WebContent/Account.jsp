@@ -84,7 +84,7 @@ $(function(){
   <a href="Welcome.jsp">Home</a>
   <a href="FundTransferLogin.jsp">Fund Transfer</a>
   <a href="#ChequeBookRequest" onclick="report(this)">Cheque Book Request</a>
-  <a href="#about">About</a>
+  <a href="ChangeAddress.jsp">Change Address</a>
 </div>
 
 
